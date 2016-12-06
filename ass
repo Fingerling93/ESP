@@ -1,0 +1,75 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+enum sex 
+{
+	male = 1,
+	female = 2,
+};
+
+enum relation
+{
+	sister = 1, 
+	brother = 2,
+	mother = 3,
+	father = 4,
+	aunt = 5,
+	uncle = 6,
+	granndmother = 7,
+	grandfater = 8,
+	mgm = 9,
+	fgm = 10,
+	mgf = 11,
+	fgf = 12,
+};														
+enum add_person{person1, person2,};
+
+typedef struct _person_
+{
+	char name;
+}person;
+
+// Function Prototype (commands which user can input)
+char command_add();
+char command_draw_all();
+char command_draw();
+char command_relationship();
+char command_list();
+int quit();
+
+
+main (int argc, char *argv[])
+{	
+	char c;
+	//char *bytes_read;
+	if (argc == 2)
+	{
+		const char *dot = strrchr(argv[1], '.');
+	printf("%s\n", dot);
+	if (strcmp(dot, ".dot") == 0){
+		printf("error\n");
+	}
+		//fgetline()
+	}
+
+{
+	printf("yes\n");
+}
+
+while(1){	
+	printf("\nesp> ");
+	c = getchar();
+	}
+	//printf("%s " ,argv[2]);
+
+	
+	
+		return 0;
+
+
+}
+	
+		
+	
+
