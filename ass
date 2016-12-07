@@ -1,34 +1,44 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
-enum sex 
+#define ADD_CMD 1
+#define DRAW_ALL_CMD 2
+#define DRAW_CMD 3
+#define RELATIONSHIP_CMD 4
+#define LIST_CMD 5
+#define QUIT_CMD 6
+#define EOF_CMD 7
+
+enum gender
 {
-	male = 1,
-	female = 2,
+    male = 1,
+    female = 2,
 };
 
 enum relation
 {
-	sister = 1, 
-	brother = 2,
-	mother = 3,
-	father = 4,
-	aunt = 5,
-	uncle = 6,
-	granndmother = 7,
-	grandfater = 8,
-	mgm = 9,
-	fgm = 10,
-	mgf = 11,
-	fgf = 12,
-};														
+    sister = 1,
+    brother = 2,
+    mother = 3,
+    father = 4,
+    aunt = 5,
+    uncle = 6,
+    grandmother = 7,
+    grandfather = 8,
+    mgm = 9,
+    fgm = 10,
+    mgf = 11,
+    fgf = 12,
+};
 enum add_person{person1, person2,};
 
 typedef struct _person_
 {
-	char name;
+    char name;
 }person;
+
 
 // Function Prototype (commands which user can input)
 char command_add();
@@ -37,39 +47,130 @@ char command_draw();
 char command_relationship();
 char command_list();
 int quit();
+char inputTerminalCommands(char *input);
 
-
-main (int argc, char *argv[])
-{	
-	char c;
-	//char *bytes_read;
-	if (argc == 2)
-	{
-		const char *dot = strrchr(argv[1], '.');
-	printf("%s\n", dot);
-	if (strcmp(dot, ".dot") == 0){
-		printf("error\n");
-	}
-		//fgetline()
-	}
-
+//********************************************************************************************************//
+char inputTerminalCommands(char *input) // takes char input from main and compares type of command
 {
-	printf("yes\n");
+    /*char *str = input;
+    char *split = strtok (str, " ");
+    while (split != NULL)
+    {
+        printf("%s\n",split);
+        split = strtok(NULL, " ");
+    }
+    return 0;*/
+    int i = 0;
+    char *str = input;
+    char *split = strtok(str, " ");  // split string into words after "space"
+    char *array[6] ;
+    while(split!= 0)
+    {
+        array[i++] = split;
+        split = strtok(NULL, " ");
+    }
+
+    //return 0;
+
+
+    if (!strcmp(array[0], "add")) { // compare commands ( not sure if correct to do so)
+        printf("its add\n");
+        return ADD_CMD;
+
+    }
+    else if (!strcmp(array[0], "draw-all"))
+    {
+        printf("its draw-all\n");
+        return DRAW_ALL_CMD;
+    }
+    else if(!strcmp(array[0], "draw"))
+    {
+        printf("its draw\n");
+        return DRAW_CMD;
+    }
+    else if(!strcmp(array[0], "relationship"))
+    {
+        printf("its relationship\n");
+        return RELATIONSHIP_CMD;
+    }
+    else if(!strcmp(array[0], "list"))
+    {
+        printf("its list\n");
+        return LIST_CMD;
+    }
+    else if(!strcmp(array[0], "quit"))
+    {
+        printf("its quit\n");
+        return QUIT_CMD;
+    }
+    else if(!strcmp(array[0], "EOF"))
+    {
+        printf("its EOF\n");
+        return EOF_CMD;
+    }
+
+      char command_add(char *input)
+    {
+      printf("Evo me\n");
+    }
+return 0;
 }
+///////////////////////////////////////////////////////////////
+//	MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN   //
+//	  													     //
+///////////////////////////////////////////////////////////////
+    int main(int argc, char *argv[]) {
+        int len_max = 256;
+        char *input = (char *) malloc(len_max * sizeof(char)); // memory for input , used for storing commands.
+        FILE *fp;
 
-while(1){	
-	printf("\nesp> ");
-	c = getchar();
-	}
-	//printf("%s " ,argv[2]);
+        if (input == NULL) {
+            printf("[ERR] Out of memory.\n");
+            return 2;
+        }
+        if (argc == 1) // if program started only with ./ass, load input from user
+        {
+            while(1)
+            {
+                printf("esp> ");
+                char read[len_max];
+                input = fgets(read, len_max, stdin);
+                int len= strlen(read);
 
-	
-	
-		return 0;
+                if(read[len-1] == '\n')
+                {
+                    read[len-1] = '\0';
+                }
+
+                inputTerminalCommands(input);
+            }
+        }
+        else if (argc == 2) // check parameters when starting program
+        {
+            const char *dot = strrchr(argv[1], '.'); // check for . (dot) and store it in *dot
+
+            if (strcmp(dot, ".dot") == 0) // if .dot exists:
+            {
+                printf("%s\n", dot);
+                fp = fopen(argv[1], "a+"); // a+ opens file for reading and appending ( check if other type needed! )
+            }
+            else if (strcmp(dot, ".dot"))
+            {
+                   printf("Usage: ./ass [file-name]\n");
+                   return 2;
+            }
+
+        }
+        else if (argc > 2)
+        {
+             printf("Usage: ./ass [file-name]\n");
+             return 1;
+        }
+    free(input);
+    return 0;
+    }
 
 
-}
-	
-		
-	
+
+
 
