@@ -53,7 +53,7 @@ typedef struct _user_input_   // used for breaking input string into multiple st
 
 // Function Prototype (commands which user can input)
 char commandAdd();
-char commandDrawAll();
+char commandDrawAll(char*input);
 char commandDraw();
 char commandRelationship();
 char commandList();
@@ -64,116 +64,125 @@ char inputTerminalCommands(char *input);
 char inputTerminalCommands(char *input) // takes char input from main and compares type of command
 {
     /*
-Using strchr we can iterate through the string, parsing command name
+Using strchr you can iterate through the string, parsing command name
 gender relation sex. This will fail if there are more than one space
-between words but additional logic could be added to solve multiple
+between words but additional logic could be added to accommodate multiple
 spaces. It also fails if the format command name relation name
 is not observed but again additional logic could be added to handle that.
 Checks need to be added to handle a failure of malloc.
 */
-    userInput item;
-    char *start = NULL;
-    char *stop = NULL;
-    int span = 0;
-    userInput item;
-          //with strchr it will parse first word, ( store string after " " in stop, whole string is in start var)
-    start = input;
-    if ( ( stop = strchr ( start, ' '))) {
-        span = stop - start;               // equal to ( string without first word - whole string ( if command add, than spin = 3))
-        item.command = malloc ( span + 1);  // allocate space for first string
-        memmove ( item.command, start, span);
-        item.command[span] = '\0';
-    }
-    //parsing name - each name begins with Capital letter
-    start = stop + 1;
-    stop = start;;
-    while ( ( stop = strchr ( stop, ' '))) {
-        if ( !isupper( *(stop + 1))) {
-            span = stop - start;
-            item.name = malloc ( span + 1);
-            memmove ( item.name, start, span);
-            item.name[span] = '\0';
-            break;
-        }
-        stop = stop + 1;
-    }
-    //store  gender - one character inside brackets []
-    start = stop;
-    item.gender = '*';
-    if ( *(start + 1) == '[') {
-        item.gender = *(start + 2);
-        stop = strchr ( start + 1, ' ');
-    }
-    //store  relation
-    start = stop + 1;
-    if ( ( stop = strchr ( start, ' '))) {
-        span = stop - start;
-        item.relation = malloc ( span + 1);
-        memmove ( item.relation, start, span);
-        item.relation[span] = '\0';
-    }
-    //parse name - could be many words, each begins with upper case
-    start = stop + 1;
-    stop = start;;
-    while ( ( stop = strchr ( stop, ' '))) {
-        if ( !isupper( *(stop + 1))) {
-            span = stop - start;
-            item.identity = malloc ( span + 1);
-            memmove ( item.identity, start, span);
-            item.identity[span] = '\0';
-            break;
-        }
-        stop = stop + 1;
-    }
-    if ( !stop) { // if nothing follows identity...strchr failed on last name
-        span = strlen ( start);
-        item.identity = malloc ( span + 1);
-        memmove ( item.identity, start, span);
-        item.identity[span] = '\0';
-        stop = start + span;
-    }
-    // - store genderTwo - one character inside brackets []
-    start = stop;
-    item.genderTwo = '*';
-    if ( *(start + 1) == '[') {
-        item.genderTwo = *(start + 2);
-    }
-        // this part only for testing
-    printf ( "%s\n", item.command);
-    printf ( "%s\n", item.name);
-    printf ( "%c\n", item.gender);
-    printf ( "%s\n", item.relation);
-    printf ( "%s\n", item.identity);
-    printf ( "%c\n", item.genderTwo);
-
-    free ( item.command);
-    free ( item.name);
-    free ( item.relation);
-    free ( item.identity);
-
-
-    // *****************************/////
-    int i = 0;
+    int i = 0;          // here is splited words by space ( add nikola balac ...  draw filename)
     char *str = input;
     char *split = strtok(str, " ");  // split string into words after "space"
     char *array[8] ;
+
     while(split!= 0)
     {
         array[i++] = split;
         split = strtok(NULL, " ");
     }
 
-    //return 0;
-
-
     if (!strcmp(array[0], "add")) { // compare commands ( not sure if correct to do so)
         printf("its add\n");
-        return ADD_CMD;
+        //return ADD_CMD;
 
+
+
+        userInput item;          // this function will take command "add" , split whole commands into separate strings and store it into struct(command,gender,relation..)
+        char *start = NULL;
+        char *stop = NULL;
+        int span = 0;
+
+
+
+        //with strchr it will parse first word, ( store string after " " in stop, whole string is in start var)
+        start = input;
+
+
+        if ((stop = strchr(start, ' '))) {
+            span = stop - start;               // equal to ( string without first word - whole string ( if command add, than spin = 3))
+            item.command = malloc(span + 1);  // allocate space for first string
+            printf("start: %s\n ", start);
+            memmove(item.command, start, span);
+            item.command[span] = '\0';
+        }
+
+        //parsing name - each name begins with Capital letter
+        start = stop + 1;
+        printf("here: %s", stop);
+        stop = start;
+        while ((stop = strchr(stop, ' '))) {
+            if (!isupper(*(stop + 1))) {
+                span = stop - start;
+                item.name = malloc(span + 1);
+                memmove(item.name, start, span);
+                item.name[span] = '\0';
+                break;
+            }
+            stop = stop + 1;
+        }
+        //store  gender - one character inside brackets []
+        start = stop;
+        item.gender = '*';
+        if (*(start + 1) == '[') {
+            item.gender = *(start + 2);
+            stop = strchr(start + 1, ' ');
+        }
+        //store  relation
+        start = stop + 1;
+        if ((stop = strchr(start, ' '))) {
+            span = stop - start;
+            item.relation = malloc(span + 1);
+            memmove(item.relation, start, span);
+            item.relation[span] = '\0';
+        }
+        //parse name - could be many words, each begins with upper case
+        start = stop + 1;
+        stop = start;;
+        while ((stop = strchr(stop, ' '))) {
+            if (!isupper(*(stop + 1))) {
+                span = stop - start;
+                item.identity = malloc(span + 1);
+                memmove(item.identity, start, span);
+                item.identity[span] = '\0';
+                break;
+            }
+            stop = stop + 1;
+        }
+        if (!stop) { // if nothing follows identity...strchr failed on last name
+            span = strlen(start);
+            item.identity = malloc(span + 1);
+            memmove(item.identity, start, span);
+            item.identity[span] = '\0';
+            stop = start + span;
+        }
+        // - store genderTwo - one character inside brackets []
+        start = stop;
+        item.genderTwo = '*';
+        if (*(start + 1) == '[') {
+            item.genderTwo = *(start + 2);
+        }
+        // this part only for testing
+        printf("%s\n", item.command);
+        printf("%s\n", item.name);
+        printf("%c\n", item.gender);
+        printf("%s\n", item.relation);
+        printf("%s\n", item.identity);
+        printf("%c\n", item.genderTwo);
+
+        free(item.command);
+        free(item.name);
+        free(item.relation);
+        free(item.identity);
     }
+
+    // *****************************/////
+
+
     else if (!strcmp(array[0], "draw-all"))
     {
         printf("its draw-all\n");
+        commandDrawAll(input);
         return DRAW_ALL_CMD;
     }
     else if(!strcmp(array[0], "draw"))
@@ -208,6 +217,34 @@ Checks need to be added to handle a failure of malloc.
     }*/
 return 0;
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Questions: after i take the input from user (input stored in "char input") , in function inputTerminal() input line is splitted into separate strings and stored in array[8] ( 8 because
+// the largest command (add person(1st and last name) [gender] relation person [gender] ) can have 8 arguments, other commands are smaller...then in function inputTerminal i check if array[0] is "add", if true,
+// input string is then splited and saved in struct userInput. (item.command, item. name , and so on). I splited input and saved it in struct because it will be useful for later, when i start with implementing
+// functionality of commands(what they are supposed to do).
+//  * for "command add person relation person" how to count as one argument if more than one space between first-last name (for now it allows one space)
+//  * how to check other commands ? should i also split them and save in struct ? should i use same method as i did for "add person.." ?
+//    but for each command to make a new function...
+//  * 
+//
+char commandDrawAll(char*input) // check draw-all command for now
+{
+    userInput *data;
+    char *begin = NULL;
+    char *end = NULL;
+    int div = 0;
+    begin = input;
+if((end = strchr(begin,' ')))
+{
+    div = end - begin;
+    data->command = malloc (div +1);
+    memmove(data->command, begin, div);
+    data->command[div] = '\0';
+}
+   printf("command %s: ", data->command);
+    free((*data).command);          // there is problem with free() error:" invalid pointer: aborted(core dumped)
+    return 0;
+}
 ///////////////////////////////////////////////////////////////
 //	MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN   //
 //	  													     //
@@ -234,8 +271,7 @@ return 0;
                 {
                     read[len-1] = '\0';
                 }
-
-                inputTerminalCommands(input);
+                inputTerminalCommands(input); // go to function ;
             }
         }
         else if (argc == 2) // check parameters when starting program
@@ -262,8 +298,6 @@ return 0;
     free(input);
     return 0;
     }
-
-
 
 
 
