@@ -16,51 +16,51 @@
 #define SUCCESSFUL 0
 #define GRESKA "[ERR] Wrong usage - add <namePerson1> [m/f] <relation> <namePerson2> [m/f].\n"
 
-enum GENDER
-{
-    male = 1,
-    female = 2,
+enum _GENDER_
+{  MALE = 1,
+    FEMALE = 2,
 };
 
-enum RELATION
+enum _RELATION_
 {
-    sister = 1,
-    brother = 2,
-    mother = 3,
-    father = 4,
-    aunt = 5,
-    uncle = 6,
-    grandmother = 7,
-    grandfather = 8,
-    mgm = 9,
-    fgm = 10,
-    mgf = 11,
-    fgf = 12,
+    SISTER = 1,
+    BROTHER = 2,
+    MOTHER = 3,
+    FATHER = 4,
+    AUNT = 5,
+    UNCEL = 6,
+    GRANDMOTHER = 7,
+    GRANDFATHER = 8,
+    MGM = 9,
+    FGM = 10,
+    MGF = 11,
+    FGF = 12,
 };
+
 enum ADD_PERSON {person1, person2};
 
 typedef struct _Person_
 {
     char* name_;
     char gender_;
-    struct person* mgm_;
-    struct person* mgf_;
-    struct person* fgm_;
-    struct person* fgf_;
-    struct person* father_;
-    struct person* mother_;
-    struct person* next_;
-    struct person* prev_;
+    struct _Person_* mgm_;
+    struct _Person_* mgf_;
+    struct _Person_* fgm_;
+    struct _Person_* fgf_;
+    struct _Person_* father_;
+    struct _Person_* mother_;
+    struct _Person_* next_;
+    struct _Person_* prev_;
 } Person;
 
-struct userInput   // used for breaking input string into multiple strings( command, name, relation, gender)..
+struct userInput   // used for breaking input string into multiple strings (command, name, relation, gender...)
 {
-    char* command;
-    char* name;
-    char gender;
-    char* relation;
-    char* identity;
-    char genderTwo;
+    char* command_;
+    char* name_;
+    char gender_;
+    char* relation_;
+    char* identity_;
+    char gender_two_;
 };
 
 // Function Prototype (commands which user can input)
@@ -70,11 +70,21 @@ char drawCommand(char** input);
 char relationshipCommand(char** input);
 char listCommand(char** input);
 int quit();
-char eof_command();
-int handleUserInput(char *input);
+char eofCommand();
+int handleUserInput(char* input);
 int quitCommand(char** input);
 void displayErrorMessage(char* message);
 
+//-----------------------------------------------------------------------------
+///
+/// This is an example header comment for functions. Copypaste and adapt it!
+///
+/// @param human The human to check.
+/// @param number_to_return_if_not_married The number to return if the human
+///        is not married. Should be 0 or 1 for example purposes.
+///
+/// @return int age of spouse
+//
 void displayErrorMessage(char* message)
 {
     printf("%s\n", message);
@@ -83,7 +93,7 @@ void displayErrorMessage(char* message)
 int addCommand(char* input[]) //
 {
     //provjeriti sve stringove iz inputa
-    for(int i= 0; i<= input[0]; i++)
+    for (int i = 0; i <= input[0]; i++)
     { if (isinput[0][i] == )
 
 
@@ -103,7 +113,7 @@ int quitCommand(char* input[])
 }
 
 //********************************************************************************************************//
-int handleUserInput(char *input) // takes char input from main and compares type of command
+int handleUserInput(char* input) // takes char input from main and compares type of command
 {
     printf("input: %s\n",input );
     char* in[8];
@@ -145,9 +155,8 @@ int handleUserInput(char *input) // takes char input from main and compares type
     }
     else if(!strcmp(in[0],"EOF"))
     {
-        eof_command(in);
+        eofCommand(in);
     }
-
 
     return 1;
 }
@@ -155,12 +164,12 @@ int handleUserInput(char *input) // takes char input from main and compares type
 //  MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN   //
 //                                                           //
 ///////////////////////////////////////////////////////////////
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     char* copy_input = NULL;
     int len_max = 256;
     int error = 1;
-    char* input = (char *) malloc(len_max* sizeof(char)); // memory for input , used for storing commands.
+    char* input = (char*) malloc(len_max* sizeof(char)); // memory for input, used for storing of commands
     FILE* fp;
 
     if (input == NULL)
@@ -168,7 +177,7 @@ int main(int argc, char *argv[])
         printf("[ERR] Out of memory.\n");
         return 2;
     }
-    if (argc == 1) // if program started only with ./ass, load input from user
+    if (argc == 1) // if the program started only with './ass', load the input from user
     {
         while(1)
         {
@@ -196,11 +205,11 @@ int main(int argc, char *argv[])
             free(copy_input);
         }
     }
-    else if (argc == 2) // check parameters when starting program
+    else if (argc == 2) // checks parameters when starting program
     {
-        const char* dot = strrchr(argv[1], '.'); // check for '.' (dot) and store it in *dot
+        const char* dot = strrchr(argv[1], '.'); // checks for '.' (dot) and stores it in *dot
 
-        if (strcmp(dot, ".dot") == 0) // if .dot exists:
+        if (strcmp(dot, ".dot") == 0) // if '.dot' exists:
         {
             printf("%s\n", dot);
             fp = fopen(argv[1], "a+"); // a+ opens file for reading and writing
@@ -220,8 +229,6 @@ int main(int argc, char *argv[])
     free(input);
     return 0;
 }
-
-
 
 
 
