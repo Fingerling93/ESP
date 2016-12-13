@@ -1,5 +1,3 @@
-Hi!
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -18,13 +16,13 @@ Hi!
 #define SUCCESSFUL 0
 #define GRESKA "[ERR] Wrong usage - add <namePerson1> [m/f] <relation> <namePerson2> [m/f].\n"
 
-enum gender
+enum GENDER
 {
     male = 1,
     female = 2,
 };
 
-enum relation
+enum RELATION
 {
     sister = 1,
     brother = 2,
@@ -39,9 +37,9 @@ enum relation
     mgf = 11,
     fgf = 12,
 };
-enum addPerson {person1, person2,};
+enum ADD_PERSON {person1, person2};
 
-typedef struct _person_
+typedef struct _Person_
 {
     char* name_;
     char gender_;
@@ -53,15 +51,15 @@ typedef struct _person_
     struct person* mother_;
     struct person* next_;
     struct person* prev_;
-} person;
+} Person;
 
 struct userInput   // used for breaking input string into multiple strings( command, name, relation, gender)..
 {
-    char *command;
-    char *name;
+    char* command;
+    char* name;
     char gender;
-    char *relation;
-    char *identity;
+    char* relation;
+    char* identity;
     char genderTwo;
 };
 
@@ -162,8 +160,8 @@ int main(int argc, char *argv[])
     char* copy_input = NULL;
     int len_max = 256;
     int error = 1;
-    char *input = (char *) malloc(len_max * sizeof(char)); // memory for input , used for storing commands.
-    FILE *fp;
+    char* input = (char *) malloc(len_max* sizeof(char)); // memory for input , used for storing commands.
+    FILE* fp;
 
     if (input == NULL)
     {
@@ -177,7 +175,7 @@ int main(int argc, char *argv[])
             printf("esp> "); // read last char \n as \0 so "esp>" does not skip a line
             char read[len_max];
             input = fgets(read, len_max, stdin);
-            int len= strlen(read);
+            int len = strlen(read);
 
             if(read[len-1] == '\n')
             {
@@ -200,7 +198,7 @@ int main(int argc, char *argv[])
     }
     else if (argc == 2) // check parameters when starting program
     {
-        const char *dot = strrchr(argv[1], '.'); // check for . (dot) and store it in *dot
+        const char* dot = strrchr(argv[1], '.'); // check for '.' (dot) and store it in *dot
 
         if (strcmp(dot, ".dot") == 0) // if .dot exists:
         {
@@ -222,6 +220,8 @@ int main(int argc, char *argv[])
     free(input);
     return 0;
 }
+
+
 
 
 
