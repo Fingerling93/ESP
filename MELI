@@ -1,0 +1,259 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <limits.h>
+#include <ctype.h>
+
+
+#define ADD_CMD 1
+#define DRAW_ALL_CMD 2
+#define DRAW_CMD 3
+#define RELATIONSHIP_CMD 4
+#define LIST_CMD 5
+#define QUIT_CMD 6
+#define EOF_CMD 7
+#define ERROR_INVALID_PARAM 1
+#define SUCCESSFUL 0
+#define ERROR_ADD_1 "[ERR] Wrong usage - add <namePerson1> [m/f] <relation> <namePerson2> [m/f].\n"
+#define ERROR_ADD_2 "[ERR] Sex does not match with relation.\n"
+#define ERORR_ADD_3 "[ERR] Both people are the same.\n"
+#define ERORR_ADD_4 "[ERR] Relation not possible.\n"
+
+enum gender
+{
+    male = 1,
+    female = 2,
+};
+
+enum relation
+{
+    sister = 1,
+    brother = 2,
+    mother = 3,
+    father = 4,
+    aunt = 5,
+    uncle = 6,
+    grandmother = 7,
+    grandfather = 8,
+    mgm = 9,
+    fgm = 10,
+    mgf = 11,
+    fgf = 12,
+};
+enum addPerson {person1, person2,};
+
+typedef struct _person_
+{
+    char* name_;
+    char gender_;
+    struct person* mgm_;
+    struct person* mgf_;
+    struct person* fgm_;
+    struct person* fgf_;
+    struct person* father_;
+    struct person* mother_;
+    struct person* next_;
+    struct person* prev_;
+} person;
+
+struct userInput   // used for breaking input string into multiple strings( command, name, relation, gender)..
+{
+    char *command;
+    char *name;
+    char gender;
+    char *relation;
+    char *identity;
+    char genderTwo;
+};
+
+// Function Prototype (commands which user can input)
+int addCommand(char** input);
+int drawAllCommand(char** input);
+int drawCommand(char** input);
+int relationshipCommand(char** input);
+int listCommand(char** input);
+int quit();
+char eofCommand();
+int handleUserInput(char *input);
+int quitCommand(char** input);
+void displayErrorMessage(char* message);
+
+void displayErrorMessage(char* message)
+{
+    printf("%s\n", message);
+}
+
+int addCommand(char* input[]) //
+{
+    int i= 0;
+    //provjeriti sve stringove iz inputa
+    printf("asfasf: %s\n",input[1]);
+    displayErrorMessage(ERROR_ADD_1);
+
+    return SUCCESSFUL;
+}
+
+
+int drawAllCommand(char** input)
+{
+    printf("drawAllCommand");
+    return 0;
+}
+
+int drawCommand(char** input)
+{
+    printf("drawCommand");
+    return 0;
+}
+
+int relationshipCommand(char** input)
+{
+    printf("relationshipCommand");
+    return 0;
+}
+
+int listCommand(char** input)
+{
+    printf("listCommand");
+    return 0;
+}
+
+char eofCommand()
+{
+    printf("EOF");
+    return 0;
+}
+
+int quitCommand(char* input[])
+{
+    printf("Bye.\n");
+
+
+}
+
+//********************************************************************************************************//
+int handleUserInput(char *input) // takes char input from main and compares type of command
+{
+    //printf("input: %s\n",input );
+    char* in[8];
+    int i = 0;
+    char* temp;
+    char delimiter[] = " ";
+    temp = strtok(input, delimiter);
+    in[i++] = temp;
+    while( temp != NULL)
+    {
+        temp = strtok(NULL, delimiter);
+        in[i++] = temp;
+        // printf("%s\n", temp);
+    }
+    if(!strcmp(in[0], "add"))
+    {
+        addCommand(in);
+    }
+    else if (!strcmp(in[0], "draw-all"))
+    {
+        drawAllCommand(in);
+    }
+    else if(!strcmp(in[0], "draw"))
+    {
+        drawCommand(in);
+    }
+    else if(!strcmp(in[0], "relationship"))
+    {
+        relationshipCommand(in);
+    }
+    else if(!strcmp(in[0], "list"))
+    {
+        listCommand(in);
+    }
+    else if(!strcmp(in[0], "quit"))
+    {
+        quitCommand(in);
+        return SUCCESSFUL;
+    }
+    else if(!strcmp(in[0],"EOF"))
+    {
+        eofCommand(in);
+    }
+    else // maybe not needed
+    {
+        printf("Usage: ./ass [file-name]\n");
+    }
+
+
+    return 1;
+}
+///////////////////////////////////////////////////////////////
+//  MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN MAIN   //
+//                                                           //
+///////////////////////////////////////////////////////////////
+int main(int argc, char *argv[])
+{
+    char* copy_input = NULL;
+    int len_max = 256;
+    int error = 1;
+    char *input = (char *) malloc(len_max * sizeof(char)); // memory for input , used for storing commands.
+    FILE *fp;
+
+    if (input == NULL)
+    {
+        printf("[ERR] Out of memory.\n");
+        return 2;
+    }
+    if (argc == 1) // if program started only with ./ass, load input from user
+    {
+        while(1)
+        {
+            printf("esp> "); // read last char \n as \0 so "esp>" does not skip a line
+            char read[len_max];
+            input = fgets(read, len_max, stdin);
+            int len= strlen(read);
+
+            if(read[len-1] == '\n')
+            {
+                read[len-1] = '\0';
+            }
+            copy_input = input;
+
+            error = handleUserInput (copy_input);
+            if(error == 0)
+            {
+                copy_input = NULL;
+                input = NULL;
+
+                free(input);
+                free(copy_input);
+                return 0;
+            }
+            free(copy_input);
+        }
+    }
+    else if (argc == 2) // check parameters when starting program
+    {
+        const char *dot = strrchr(argv[1], '.'); // check for . (dot) and store it in *dot
+
+        if (strcmp(dot, ".dot") == 0) // if .dot exists:
+        {
+            printf("%s\n", dot);
+            fp = fopen(argv[1], "a+"); // a+ opens file for reading and writing
+        }
+        else if (strcmp(dot, ".dot"))
+        {
+            printf("Usage: ./ass [file-name]\n");
+            return 2;
+        }
+
+    }
+    else if (argc > 2)
+    {
+        printf("Usage: ./ass [file-name]\n");
+        return 1;
+    }
+    free(input);
+    return 0;
+}
+
+
+
+
