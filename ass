@@ -14,7 +14,10 @@
 #define EOF_CMD 7
 #define ERROR_INVALID_PARAM 1
 #define SUCCESSFUL 0
-#define GRESKA "[ERR] Wrong usage - add <namePerson1> [m/f] <relation> <namePerson2> [m/f].\n"
+#define ERROR_ADD_1 "[ERR] Wrong usage - add <namePerson1> [m/f] <relation> <namePerson2> [m/f].\n"
+#define ERROR_ADD_2 "[ERR] Sex does not match with relation.\n"
+#define ERORR_ADD_3 "[ERR] Both people are the same.\n"
+#define ERORR_ADD_4 "[ERR] Relation not possible.\n"
 
 enum _GENDER_
 {  MALE = 1,
@@ -65,15 +68,16 @@ struct userInput   // used for breaking input string into multiple strings (comm
 
 // Function Prototype (commands which user can input)
 int addCommand(char** input);
-char drawAllCommand(char** input);
-char drawCommand(char** input);
-char relationshipCommand(char** input);
-char listCommand(char** input);
+int drawAllCommand(char** input);
+int drawCommand(char** input);
+int relationshipCommand(char** input);
+int listCommand(char** input);
 int quit();
 char eofCommand();
 int handleUserInput(char* input);
 int quitCommand(char** input);
 void displayErrorMessage(char* message);
+
 
 //-----------------------------------------------------------------------------
 ///
@@ -87,22 +91,102 @@ void displayErrorMessage(char* message);
 //
 void displayErrorMessage(char* message)
 {
-    printf("%s\n", message);
+   printf("%s\n", message);
 }
 
 int addCommand(char* input[]) //
 {
-    //provjeriti sve stringove iz inputa
-    for (int i = 0; i <= input[0]; i++)
-    { if (isinput[0][i] == )
+    //check all strings from input
+     printf("one input: %c\n",input[1][0]);
+    char* gender = NULL;
+
+    for (int i = 0; input[1][i] != '\0'; i++)    // check input[1] if only alphabetic
+        {
+            if(isalpha( input[1][i] ))
+            {
+                printf("alphabetic name\n");
+            }
+            else        // if name contains invalid chars, print error
+            {
+                displayErrorMessage(ERROR_ADD_1);
+            }
+        }
+   // printf("first name: %s\n", firstName);
+
+    if(input[2][0] == '[')  // check if first char of input[2] last name or gender('[')
+    {
+        printf("input[2] is gender\n");
+        if(strcmp(input[2],"[m]") || strcmp(input[2],"[f]")) // check if gender correct type ( [m] or [f] );
+        {
+            printf("uslo\n");
+            displayErrorMessage(ERROR_ADD_1);
+        }
+        else
+        {
+            gender = input[2];
+            printf("ok\n");
+        }
+    }
+    else
+    {               // input[2] does not have "[" and its considered as last name...
+        for(int p = 0;input[2][p] != '\0';p++ )
+        {
+            if(isalpha(input[2][p]))  // check if only alphabetic
+            {
+                printf("check last name ok\n");
+                ;
+            }
+            else
+            {
+                displayErrorMessage(ERROR_ADD_1);
+            }
+        }
+
+    }
 
 
 
-
-
-    displayErrorMessage(GRESKA);
+    //displayErrorMessage(ERROR_ADD_1);
 
     return SUCCESSFUL;
+
+
+
+
+
+    displayErrorMessage(ERROR_ADD_1);
+
+    return SUCCESSFUL;
+}
+
+int drawAllCommand(char** input)
+{
+    printf("drawAllCommand");
+    return 0;
+}
+
+int drawCommand(char** input)
+{
+   printf("drawCommand");
+   return 0;
+}
+
+int relationshipCommand(char** input)
+{
+    printf("relationshipCommand");
+    return 0;
+}
+
+int listCommand(char** input)
+{
+    printf("listCommand");
+    return 0;
+}
+
+char eofCommand()
+{
+    printf("EOF");
+    return 0;
 }
 
 int quitCommand(char* input[])
@@ -156,6 +240,11 @@ int handleUserInput(char* input) // takes char input from main and compares type
     else if(!strcmp(in[0],"EOF"))
     {
         eofCommand(in);
+    }
+    else // maybe not needed
+    {
+        // if non existent command typed, it should be just ignored
+        printf("non existing command\n");
     }
 
     return 1;
