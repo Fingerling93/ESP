@@ -19,28 +19,33 @@
 #define ERORR_ADD_3 "[ERR] Both people are the same.\n"
 #define ERORR_ADD_4 "[ERR] Relation not possible.\n"
 
-enum _GENDER_
-{  MALE = 1,
-    FEMALE = 2,
-};
-
-enum _RELATION_
+enum _Gender_
 {
-    SISTER = 1,
-    BROTHER = 2,
-    MOTHER = 3,
-    FATHER = 4,
-    AUNT = 5,
-    UNCEL = 6,
-    GRANDMOTHER = 7,
-    GRANDFATHER = 8,
-    MGM = 9,
-    FGM = 10,
-    MGF = 11,
-    FGF = 12,
+  MALE = 1,
+  FEMALE = 2,
 };
 
-enum ADD_PERSON {person1, person2};
+enum _Relation_
+{
+  SISTER = 1,
+  BROTHER = 2,
+  MOTHER = 3,
+  FATHER = 4,
+  AUNT = 5,
+  UNCEL = 6,
+  GRANDMOTHER = 7,
+  GRANDFATHER = 8,
+  MGM = 9,
+  FGM = 10,
+  MGF = 11,
+  FGF = 12,
+};
+
+enum _AddPerson_ 
+{
+  person1,
+  person2
+};
 
 typedef struct _Person_
 {
@@ -56,17 +61,19 @@ typedef struct _Person_
     struct _Person_* prev_;
 } Person;
 
-struct userInput   // used for breaking input string into multiple strings (command, name, relation, gender...)
+// breaks input string into multiple strings (command, name, relation, gender...)
+struct userInput   
 {
     char* command_;
     char* name_;
     char gender_;
+    char gender_two_;
     char* relation_;
     char* identity_;
-    char gender_two_;
+    
 };
 
-// Function Prototype (commands which user can input)
+// Function Prototypes (commands which user can input)
 int addCommand(char** input);
 int drawAllCommand(char** input);
 int drawCommand(char** input);
@@ -94,7 +101,7 @@ void displayErrorMessage(char* message)
    printf("%s\n", message);
 }
 
-int addCommand(char* input[]) //
+int addCommand(char* input[]) 
 {
     //check all strings from input
      printf("one input: %c\n",input[1][0]);
@@ -199,14 +206,14 @@ int quitCommand(char* input[])
 //********************************************************************************************************//
 int handleUserInput(char* input) // takes char input from main and compares type of command
 {
-    printf("input: %s\n",input );
+    printf("input: %s\n", input);
     char* in[8];
     int i = 0;
     char* temp;
     char delimiter[] = " ";
     temp = strtok(input, delimiter);
     in[i++] = temp;
-    while( temp != NULL)
+    while(temp != NULL)
     {
         temp = strtok(NULL, delimiter);
         in[i++] = temp;
