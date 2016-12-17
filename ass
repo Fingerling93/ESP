@@ -1,3 +1,15 @@
+//-----------------------------------------------------------------------------
+// assa.c
+// Familly tree for ancestry research
+// Group: 1, study assistant Philip Hafner
+// Authors: 
+// Oleksii Sapov 0873049
+// Nikola Balac 1231799
+// Last changes: 22.12.2016
+//-----------------------------------------------------------------------------
+//
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
