@@ -116,7 +116,7 @@ void displayErrorMessage(char* message)
 int addCommand(char* input[]) 
 {
     //check all strings from input
-     printf("one input: %c\n",input[1][0]);
+   /*   printf("one input: %c\n",input[1][0]);
     char* gender = NULL;
 
     for (int i = 0; input[1][i] != '\0'; i++)    // check input[1] if only alphabetic
@@ -166,7 +166,7 @@ int addCommand(char* input[])
 
 
     //displayErrorMessage(ERROR_ADD_1);
-
+*/
     return SUCCESSFUL;
 
 
