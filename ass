@@ -2,7 +2,7 @@
 // assa.c
 // Familly tree for ancestry research
 // Group: 1, study assistant Philip Hafner
-// Authors: 
+// Authors:
 // Oleksii Sapov 0873049
 // Nikola Balac 1231799
 // Last changes: 22.12.2016
@@ -16,7 +16,7 @@
 #include <limits.h>
 #include <ctype.h>
 
-
+#define READ_MAX (256)
 #define ADD_CMD 1
 #define DRAW_ALL_CMD 2
 #define DRAW_CMD 3
@@ -30,62 +30,54 @@
 #define ERROR_ADD_2 "[ERR] Sex does not match with relation.\n"
 #define ERORR_ADD_3 "[ERR] Both people are the same.\n"
 #define ERORR_ADD_4 "[ERR] Relation not possible.\n"
-
-enum _Gender_
-{
-  MALE = 1,
-  FEMALE = 2,
+#define ERROR_DRAW_ALL_1 "[ERR] Wrong usage - draw-all <file-name>.\n"
+enum _GENDER_
+{  MALE = 1,
+    FEMALE = 2,
 };
 
-enum _Relation_
+enum _RELATION_
 {
-  SISTER = 1,
-  BROTHER = 2,
-  MOTHER = 3,
-  FATHER = 4,
-  AUNT = 5,
-  UNCEL = 6,
-  GRANDMOTHER = 7,
-  GRANDFATHER = 8,
-  MGM = 9,
-  FGM = 10,
-  MGF = 11,
-  FGF = 12,
+    SISTER = 1,
+    BROTHER = 2,
+    MOTHER = 3,
+    FATHER = 4,
+    AUNT = 5,
+    UNCLE = 6,
+    GRANDMOTHER = 7,
+    GRANDFATHER = 8,
+    MGM = 9,
+    FGM = 10,
+    MGF = 11,
+    FGF = 12,
 };
 
-enum _AddPerson_ 
-{
-  person1,
-  person2
-};
+enum Add_PERSON {person1, person2};
 
 typedef struct _Person_
 {
     char* name_;
     char gender_;
-    struct _Person_* mgm_;
+/*    struct _Person_* mgm_;
     struct _Person_* mgf_;
     struct _Person_* fgm_;
     struct _Person_* fgf_;
-    struct _Person_* father_;
-    struct _Person_* mother_;
-    struct _Person_* next_;
-    struct _Person_* prev_;
+    struct _Person_* father_;*/
+    struct _Person_* mother;
+    struct _Person_* father;
 } Person;
 
-// breaks input string into multiple strings (command, name, relation, gender...)
-struct userInput   
+struct userInput   // used for breaking input string into multiple strings (command, name, relation, gender...)
 {
     char* command_;
     char* name_;
     char gender_;
-    char gender_two_;
     char* relation_;
     char* identity_;
-    
+    char gender_two_;
 };
 
-// Function Prototypes (commands which user can input)
+// Function Prototype (commands which user can input)
 int addCommand(char** input);
 int drawAllCommand(char** input);
 int drawCommand(char** input);
@@ -110,59 +102,72 @@ void displayErrorMessage(char* message);
 //
 void displayErrorMessage(char* message)
 {
-   printf("%s\n", message);
+    printf("%s\n", message);
 }
 
-int addCommand(char* input[]) 
+int addCommand(char* input[]) //
 {
-    //check all strings from input
-   /*   printf("one input: %c\n",input[1][0]);
+
+    //char* new_input[8];
+
+
+    printf("ovde\n");
+
+
+
+   /* //check all strings from input
+    printf("one input: %c\n",input[1][0]);
     char* gender = NULL;
 
     for (int i = 0; input[1][i] != '\0'; i++)    // check input[1] if only alphabetic
-        {
-            if(isalpha( input[1][i] ))
-            {
-                printf("alphabetic name\n");
-            }
-            else        // if name contains invalid chars, print error
-            {
-                displayErrorMessage(ERROR_ADD_1);
-            }
-        }
-   // printf("first name: %s\n", firstName);
-
-    if(input[2][0] == '[')  // check if first char of input[2] last name or gender('[')
     {
-        printf("input[2] is gender\n");
-        if(strcmp(input[2],"[m]") || strcmp(input[2],"[f]")) // check if gender correct type ( [m] or [f] );
+        if(isalpha( input[1][i] ))
         {
-            printf("uslo\n");
+            printf("alphabetic name\n");
+        }
+        else        // if name contains invalid chars, print error
+        {
             displayErrorMessage(ERROR_ADD_1);
         }
-        else
-        {
-            gender = input[2];
-            printf("ok\n");
-        }
     }
-    else
-    {               // input[2] does not have "[" and its considered as last name...
-        for(int p = 0;input[2][p] != '\0';p++ )
+    // printf("first name: %s\n", firstName);
+
+    if (input[2] != NULL )  // if input [2] ( last name or gender) exists, do next
+    {
+        if (input[2][0] == '[')  // check if first char of input[2] last name or gender('[')
         {
-            if(isalpha(input[2][p]))  // check if only alphabetic
+            printf("input[2] is gender\n");
+            if ((!strcmp(input[2], "[m]")) || (!strcmp(input[2], "[f]"))) // check if gender correct type ( [m] or [f] );
             {
-                printf("check last name ok\n");
-                ;
+                gender = input[2];
+                printf("ok\n");
             }
             else
             {
+                printf("uslo\n");
                 displayErrorMessage(ERROR_ADD_1);
             }
         }
+        else
+        {               // input[2] does not have "[" and its considered as last name...
+            for (int p = 0; input[2][p] != '\0'; p++)
+            {
+                if (isalpha(input[2][p]))  // check if only alphabetic
+                {
+                    printf("check last name ok\n");;
+                }
+                else
+                {
+                    displayErrorMessage(ERROR_ADD_1);
+                }
+            }
 
+        }
     }
-
+    else // if input[2] == NULL;
+    {
+        displayErrorMessage(ERROR_ADD_1);
+    }
 
 
     //displayErrorMessage(ERROR_ADD_1);
@@ -178,16 +183,26 @@ int addCommand(char* input[])
     return SUCCESSFUL;
 }
 
-int drawAllCommand(char** input)
+int drawAllCommand(char* input[])
 {
-    printf("drawAllCommand");
+    //if ( input > 2 || input )
+    for(int i= 0; input[i] != '\0';i++ )
+    {
+        if((i > 1) || (i < 1))
+        {
+            displayErrorMessage(ERROR_DRAW_ALL_1);
+        }
+    }
+
+    printf("drawAllCommand\n");
+    printf("Creating DOT-file was successful.\n");
     return 0;
 }
 
 int drawCommand(char** input)
 {
-   printf("drawCommand");
-   return 0;
+    printf("drawCommand");
+    return 0;
 }
 
 int relationshipCommand(char** input)
@@ -218,14 +233,14 @@ int quitCommand(char* input[])
 //********************************************************************************************************//
 int handleUserInput(char* input) // takes char input from main and compares type of command
 {
-    printf("input: %s\n", input);
-    char* in[8];
+    printf("input: %s\n",input );
+    char* in[8] = {NULL};
     int i = 0;
     char* temp;
     char delimiter[] = " ";
     temp = strtok(input, delimiter);
     in[i++] = temp;
-    while(temp != NULL)
+    while( temp != NULL)
     {
         temp = strtok(NULL, delimiter);
         in[i++] = temp;
@@ -274,43 +289,39 @@ int handleUserInput(char* input) // takes char input from main and compares type
 ///////////////////////////////////////////////////////////////
 int main(int argc, char* argv[])
 {
-    char* copy_input = NULL;
+   // char* copy_input = NULL;
     int len_max = 256;
     int error = 1;
-    char* input = (char*) malloc(len_max* sizeof(char)); // memory for input, used for storing of commands
+  //  char* input = (char*) malloc(len_max* sizeof(char)); // memory for input, used for storing of commands
     FILE* fp;
 
-    if (input == NULL)
-    {
-        printf("[ERR] Out of memory.\n");
-        return 2;
-    }
+
     if (argc == 1) // if the program started only with './ass', load the input from user
     {
         while(1)
         {
             printf("esp> "); // read last char \n as \0 so "esp>" does not skip a line
-            char read[len_max];
-            input = fgets(read, len_max, stdin);
-            int len = strlen(read);
+            char input[len_max];
 
-            if(read[len-1] == '\n')
+            //int len = strlen(input);
+
+            if(fgets(input, len_max, stdin))
             {
-                read[len-1] = '\0';
+                input[strcspn(input,"\n")] = '\0';
+                error = handleUserInput (input);
             }
-            copy_input = input;
 
-            error = handleUserInput (copy_input);
+            printf("read: %s",input);
+
+
             if(error == 0)
             {
-                copy_input = NULL;
-                input = NULL;
-                //  free(copy_input);
-                free(input);
-                free(copy_input);
+
+              // input = NULL;
+
                 return 0;
             }
-            free(copy_input);
+
         }
     }
     else if (argc == 2) // checks parameters when starting program
@@ -334,7 +345,7 @@ int main(int argc, char* argv[])
         printf("Usage: ./ass [file-name]\n");
         return 1;
     }
-    free(input);
+
     return 0;
 }
 
